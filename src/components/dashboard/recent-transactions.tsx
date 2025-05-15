@@ -1,0 +1,66 @@
+
+import { cn } from "@/lib/utils";
+import { formatCurrency } from "@/lib/finance-utils";
+import { useFinance } from "@/context/finance-context";
+import { format } from "date-fns";
+
+export function RecentTransactions() {
+  const { state } = useFinance();
+  const recentTransactions = state.transactions
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+    .slice(0, 5);
+
+  return (
+    <div className="space-y-4">
+      <h3 className="font-medium">Recent Transactions</h3>
+      <div className="border rounded-lg">
+        <div className="transaction-row-header">
+          <div className="col-span-2 px-4">Date</div>
+          <div className="col-span-3 px-2">Category</div>
+          <div className="col-span-4 px-2">Description</div>
+          <div className="col-span-3 px-4 text-right">Amount</div>
+        </div>
+        {recentTransactions.length > 0 ? (
+          recentTransactions.map((transaction) => (
+            <div key={transaction.id} className="transaction-row">
+              <div className="col-span-2 px-4 text-sm">
+                {format(new Date(transaction.date), "MMM dd")}
+              </div>
+              <div className="col-span-3 px-2">
+                <span className="inline-block px-2 py-1 text-xs rounded-full bg-secondary">
+                  {transaction.category}
+                </span>
+              </div>
+              <div className="col-span-4 px-2 text-sm truncate">
+                {transaction.description}
+              </div>
+              <div
+                className={cn(
+                  "col-span-3 px-4 text-right font-medium",
+                  transaction.type === "income"
+                    ? "text-finance-income"
+                    : "text-finance-expense"
+                )}
+              >
+                {transaction.type === "income" ? "+" : "-"}
+                {formatCurrency(transaction.amount)}
+              </div>
+            </div>
+          ))
+        ) : (
+          <div className="py-8 text-center text-muted-foreground">
+            No transactions found
+          </div>
+        )}
+      </div>
+      <div className="flex justify-end">
+        <a
+          href="/transactions"
+          className="text-sm text-primary hover:underline"
+        >
+          View all transactions →
+        </a>
+      </div>
+    </div>
+  );
+}
