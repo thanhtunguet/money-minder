@@ -6,7 +6,10 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "@/components/theme-provider";
 import { FinanceProvider } from "@/context/finance-context";
+import { AuthProvider } from "@/context/auth-context";
+import { RequireAuth } from "@/components/auth/require-auth";
 import Index from "./pages/Index";
+import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -14,19 +17,29 @@ const queryClient = new QueryClient();
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <ThemeProvider defaultTheme="system" storageKey="moneyminder-theme">
-      <FinanceProvider>
+      <AuthProvider>
         <TooltipProvider>
           <Toaster />
           <Sonner />
           <BrowserRouter>
             <Routes>
-              <Route path="/" element={<Index />} />
+              <Route path="/auth" element={<Auth />} />
+              <Route 
+                path="/" 
+                element={
+                  <RequireAuth>
+                    <FinanceProvider>
+                      <Index />
+                    </FinanceProvider>
+                  </RequireAuth>
+                } 
+              />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
         </TooltipProvider>
-      </FinanceProvider>
+      </AuthProvider>
     </ThemeProvider>
   </QueryClientProvider>
 );
