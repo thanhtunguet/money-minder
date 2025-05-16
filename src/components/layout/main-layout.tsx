@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import { ThemeToggle } from "@/components/theme-toggle";
 import {
@@ -18,9 +18,10 @@ import { Home, Wallet, Calendar, PieChart, Settings } from "lucide-react";
 type MainLayoutProps = {
   children: React.ReactNode;
   currentPage?: string;
+  userActions?: React.ReactNode;
 };
 
-export function MainLayout({ children, currentPage = "dashboard" }: MainLayoutProps) {
+export function MainLayout({ children, currentPage = "dashboard", userActions }: MainLayoutProps) {
   const menuItems = [
     { name: "Dashboard", icon: Home, path: "/" },
     { name: "Transactions", icon: Wallet, path: "/transactions" },
@@ -66,7 +67,10 @@ export function MainLayout({ children, currentPage = "dashboard" }: MainLayoutPr
               <div className="text-xs text-muted-foreground">
                 MoneyMinder v1.0
               </div>
-              <ThemeToggle />
+              <div className="flex items-center space-x-2">
+                {userActions}
+                <ThemeToggle />
+              </div>
             </div>
           </SidebarFooter>
         </Sidebar>

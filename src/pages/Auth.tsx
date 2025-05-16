@@ -1,6 +1,6 @@
 
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,13 +10,25 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { useAuth } from "@/context/auth-context";
 
 export default function Auth() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { toast } = useToast();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const { user } = useAuth();
+  
+  // Redirect if user is already logged in
+  useEffect(() => {
+    if (user) {
+      // Get the intended destination or default to home
+      const from = location.state?.from?.pathname || "/";
+      navigate(from, { replace: true });
+    }
+  }, [user, navigate, location.state]);
 
   async function handleSignUp() {
     setLoading(true);
@@ -65,7 +77,11 @@ export default function Auth() {
           variant: "destructive",
         });
       } else {
-        navigate("/");
+        // Success is handled by the auth context and useEffect above
+        toast({
+          title: "Welcome back!",
+          description: "Successfully logged in.",
+        });
       }
     } catch (error) {
       console.error("Sign in error:", error);
@@ -77,6 +93,15 @@ export default function Auth() {
     } finally {
       setLoading(false);
     }
+  }
+
+  // If we're already logged in, show a loading state
+  if (user) {
+    return (
+      <div className="h-screen w-full flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+      </div>
+    );
   }
 
   return (
