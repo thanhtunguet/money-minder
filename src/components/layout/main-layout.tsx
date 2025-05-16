@@ -43,7 +43,7 @@ export function MainLayout({ children, currentPage = "dashboard" }: MainLayoutPr
             <SidebarMenu>
               {menuItems.map((item) => (
                 <SidebarMenuItem key={item.name}>
-                  <SidebarMenuButton asChild active={currentPage === item.name.toLowerCase()}>
+                  <SidebarMenuButton asChild>
                     <a
                       href={item.path}
                       className={cn(

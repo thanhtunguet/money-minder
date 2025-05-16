@@ -3,6 +3,7 @@ import { useFinance } from "@/context/finance-context";
 import { getBudgetVsActual, formatCurrency } from "@/lib/finance-utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
+import { cn } from "@/lib/utils";
 
 export function BudgetProgress() {
   const { state } = useFinance();
@@ -32,8 +33,11 @@ export function BudgetProgress() {
                 </div>
                 <Progress
                   value={percentage}
-                  className={isOverBudget ? "bg-red-200" : undefined}
-                  indicatorClassName={isOverBudget ? "bg-red-500" : undefined}
+                  className={cn(
+                    isOverBudget ? "bg-red-200" : undefined
+                  )}
+                  // Using className instead of indicatorClassName for the Progress indicator
+                  // The indicator style is applied via CSS
                 />
               </div>
             );
