@@ -53,7 +53,18 @@ export const getTransactionsForMonth = (
   transactions: Transaction[],
   month: Date
 ): Transaction[] => {
-  return transactions.filter(t => isSameMonth(parseISO(t.date), month));
+  return transactions.filter(t => {
+    // Add validation to make sure the date is a valid string before parsing
+    if (!t.date || typeof t.date !== 'string') {
+      return false;
+    }
+    try {
+      return isSameMonth(parseISO(t.date), month);
+    } catch (error) {
+      console.error("Invalid date format:", t.date);
+      return false;
+    }
+  });
 };
 
 // Get expense by category

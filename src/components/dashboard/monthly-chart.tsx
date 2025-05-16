@@ -15,7 +15,8 @@ import {
 
 export function MonthlyChart() {
   const { state } = useFinance();
-  const trendData = getMonthlyTrends(state.transactions);
+  // Make sure state.transactions exists before trying to process it
+  const trendData = state.transactions ? getMonthlyTrends(state.transactions) : [];
 
   return (
     <Card>

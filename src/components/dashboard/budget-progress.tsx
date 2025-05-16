@@ -36,8 +36,7 @@ export function BudgetProgress() {
                   className={cn(
                     isOverBudget ? "bg-red-200" : undefined
                   )}
-                  // Using className instead of indicatorClassName for the Progress indicator
-                  // The indicator style is applied via CSS
+                  indicatorClassName={isOverBudget ? "bg-red-500" : undefined}
                 />
               </div>
             );
