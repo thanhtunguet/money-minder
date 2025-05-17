@@ -1,4 +1,3 @@
-
-// Export all finance-related hooks and providers
-export { FinanceProvider, useFinance } from './finance/finance-context';
-export { useAuth } from './auth-context';
+export { useAuth } from "./auth-context";
+export { useFinance } from "./finance/use-finance";
+export { FinanceProvider } from "./finance/finance-provider";

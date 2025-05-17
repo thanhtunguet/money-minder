@@ -1,4 +1,3 @@
-
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { ArrowDown, ArrowUp } from "lucide-react";
@@ -14,7 +13,13 @@ interface StatCardProps {
   className?: string;
 }
 
-export function StatCard({ title, value, trend, icon, className }: StatCardProps) {
+export function StatCard({
+  title,
+  value,
+  trend,
+  icon,
+  className,
+}: StatCardProps) {
   return (
     <Card className={cn("overflow-hidden", className)}>
       <CardContent className="p-6">
@@ -33,7 +38,9 @@ export function StatCard({ title, value, trend, icon, className }: StatCardProps
               )}
               <span
                 className={
-                  trend.isPositive ? "text-finance-income" : "text-finance-expense"
+                  trend.isPositive
+                    ? "text-finance-income"
+                    : "text-finance-expense"
                 }
               >
                 {trend.value}% from last month

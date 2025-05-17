@@ -1,8 +1,22 @@
-
 import { useState, useEffect } from "react";
-import { useFinance } from "@/context/finance/finance-context";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
+import { useFinance } from "@/context";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  Legend,
+} from "recharts";
 import { getMonthlyTrends, formatCurrency } from "@/lib/finance-utils";
 import { useAuth } from "@/context/auth-context";
 import { supabase } from "@/integrations/supabase/client";
@@ -11,22 +25,22 @@ export function SpendingTrendReport() {
   const { state } = useFinance();
   const { user } = useAuth();
   const [currency, setCurrency] = useState<string>("VND");
-  
+
   // Get spending trend data
   const trendData = getMonthlyTrends(state.transactions);
-  
+
   // Get user currency preference
   useEffect(() => {
     const fetchUserCurrency = async () => {
       if (!user) return;
-      
+
       try {
         const { data, error } = await supabase
           .from("profiles")
           .select("currency")
           .eq("id", user.id)
           .single();
-          
+
         if (error) throw error;
         if (data && data.currency) {
           setCurrency(data.currency);
@@ -35,24 +49,30 @@ export function SpendingTrendReport() {
         console.error("Error fetching user currency:", error);
       }
     };
-    
+
     fetchUserCurrency();
   }, [user]);
-  
+
   // Custom tooltip for the chart
   const CustomTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
       return (
         <div className="bg-background p-4 border rounded-lg shadow-sm">
           <p className="font-medium">{label}</p>
-          <p className="text-green-500">{`Income: ${formatCurrency(payload[0].value, currency)}`}</p>
-          <p className="text-destructive">{`Expenses: ${formatCurrency(payload[1].value, currency)}`}</p>
+          <p className="text-green-500">{`Income: ${formatCurrency(
+            payload[0].value,
+            currency
+          )}`}</p>
+          <p className="text-destructive">{`Expenses: ${formatCurrency(
+            payload[1].value,
+            currency
+          )}`}</p>
         </div>
       );
     }
     return null;
   };
-  
+
   if (trendData.length === 0) {
     return (
       <Card>
@@ -63,7 +83,9 @@ export function SpendingTrendReport() {
           </CardDescription>
         </CardHeader>
         <CardContent className="text-center py-6">
-          <p className="text-muted-foreground">No transaction data available.</p>
+          <p className="text-muted-foreground">
+            No transaction data available.
+          </p>
         </CardContent>
       </Card>
     );

@@ -1,9 +1,7 @@
-
 import { useState } from "react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useFinance } from "@/context/finance/finance-context";
 import { EXPENSE_CATEGORIES } from "@/lib/finance-utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -16,19 +14,22 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { 
+import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue 
+  SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
+import { useFinance } from "@/context";
 
 const budgetFormSchema = z.object({
   category: z.string().min(1, { message: "Please select a category" }),
-  amount: z.coerce.number().positive({ message: "Amount must be greater than 0" }),
+  amount: z.coerce
+    .number()
+    .positive({ message: "Amount must be greater than 0" }),
   purpose: z.string().min(1, { message: "Purpose is required" }),
   description: z.string().optional(),
 });
@@ -61,12 +62,12 @@ export function BudgetForm({ onSuccess }: { onSuccess?: () => void }) {
         purpose: data.purpose,
         description: data.description || "",
       });
-      
+
       form.reset(defaultValues);
       if (onSuccess) {
         onSuccess();
       }
-      
+
       toast({
         title: "Budget created",
         description: "Your budget has been created successfully",
@@ -121,11 +122,11 @@ export function BudgetForm({ onSuccess }: { onSuccess?: () => void }) {
               <FormItem>
                 <FormLabel>Amount</FormLabel>
                 <FormControl>
-                  <Input 
-                    type="number" 
-                    step="0.01" 
-                    placeholder="0.00" 
-                    {...field} 
+                  <Input
+                    type="number"
+                    step="0.01"
+                    placeholder="0.00"
+                    {...field}
                     onChange={(e) => field.onChange(e.target.valueAsNumber)}
                   />
                 </FormControl>
@@ -159,10 +160,10 @@ export function BudgetForm({ onSuccess }: { onSuccess?: () => void }) {
             <FormItem>
               <FormLabel>Description (Optional)</FormLabel>
               <FormControl>
-                <Textarea 
-                  placeholder="Add more details about your budget goal" 
+                <Textarea
+                  placeholder="Add more details about your budget goal"
                   className="resize-none"
-                  {...field} 
+                  {...field}
                 />
               </FormControl>
               <FormMessage />

@@ -1,6 +1,4 @@
-
 import { useState } from "react";
-import { useFinance } from "@/context/finance-context";
 import { EXPENSE_CATEGORIES, INCOME_CATEGORIES } from "@/lib/finance-utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -20,11 +18,12 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
+import { useFinance } from "@/context";
 
 export function TransactionForm() {
   const { addTransaction } = useFinance();
   const { toast } = useToast();
-  
+
   const [formData, setFormData] = useState({
     date: new Date().toISOString().split("T")[0],
     amount: "",
@@ -60,7 +59,7 @@ export function TransactionForm() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!formData.amount || !formData.category || !formData.description) {
       toast({
         title: "Missing fields",
@@ -93,7 +92,8 @@ export function TransactionForm() {
     });
   };
 
-  const categories = formData.type === "expense" ? EXPENSE_CATEGORIES : INCOME_CATEGORIES;
+  const categories =
+    formData.type === "expense" ? EXPENSE_CATEGORIES : INCOME_CATEGORIES;
 
   return (
     <Card>
@@ -128,14 +128,11 @@ export function TransactionForm() {
               />
             </div>
           </div>
-          
+
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="type">Type</Label>
-              <Select
-                value={formData.type}
-                onValueChange={handleTypeChange}
-              >
+              <Select value={formData.type} onValueChange={handleTypeChange}>
                 <SelectTrigger id="type">
                   <SelectValue placeholder="Select type" />
                 </SelectTrigger>
@@ -164,7 +161,7 @@ export function TransactionForm() {
               </Select>
             </div>
           </div>
-          
+
           <div className="space-y-2">
             <Label htmlFor="description">Description</Label>
             <Input

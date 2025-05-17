@@ -1,5 +1,3 @@
-
-import { useFinance } from "@/context/finance/finance-context";
 import { getExpensesByCategory, formatCurrency } from "@/lib/finance-utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -10,13 +8,23 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
+import { useFinance } from "@/context/finance/use-finance";
 
-const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#a855f7', '#ec4899', '#8b5cf6', '#0ea5e9'];
+const COLORS = [
+  "#0088FE",
+  "#00C49F",
+  "#FFBB28",
+  "#FF8042",
+  "#a855f7",
+  "#ec4899",
+  "#8b5cf6",
+  "#0ea5e9",
+];
 
 export function CategoryPieChart() {
   const { state } = useFinance();
   const expensesByCategory = getExpensesByCategory(state.transactions);
-  
+
   const data = Object.entries(expensesByCategory)
     .map(([category, amount]) => ({
       name: category,
@@ -41,17 +49,22 @@ export function CategoryPieChart() {
                 outerRadius={80}
                 fill="#8884d8"
                 dataKey="value"
-                label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                label={({ name, percent }) =>
+                  `${name} ${(percent * 100).toFixed(0)}%`
+                }
               >
                 {data.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={COLORS[index % COLORS.length]}
+                  />
                 ))}
               </Pie>
               <Tooltip
                 formatter={(value) => formatCurrency(Number(value))}
-                contentStyle={{ 
-                  backgroundColor: 'var(--background)',
-                  border: '1px solid var(--border)' 
+                contentStyle={{
+                  backgroundColor: "var(--background)",
+                  border: "1px solid var(--border)",
                 }}
               />
               <Legend />

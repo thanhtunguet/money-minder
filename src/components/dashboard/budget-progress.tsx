@@ -1,9 +1,8 @@
-
-import { useFinance } from "@/context/finance/finance-context";
 import { getBudgetVsActual, formatCurrency } from "@/lib/finance-utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
+import { useFinance } from "@/context/finance/use-finance";
 
 export function BudgetProgress() {
   const { state } = useFinance();
@@ -28,14 +27,13 @@ export function BudgetProgress() {
                 <div className="flex items-center justify-between text-sm">
                   <span>{item.category}</span>
                   <span>
-                    {formatCurrency(item.spent)} / {formatCurrency(item.budgeted)}
+                    {formatCurrency(item.spent)} /{" "}
+                    {formatCurrency(item.budgeted)}
                   </span>
                 </div>
                 <Progress
                   value={percentage}
-                  className={cn(
-                    isOverBudget ? "bg-red-200" : undefined
-                  )}
+                  className={cn(isOverBudget ? "bg-red-200" : undefined)}
                   indicatorClassName={isOverBudget ? "bg-red-500" : undefined}
                 />
               </div>
@@ -48,10 +46,7 @@ export function BudgetProgress() {
         )}
 
         <div className="flex justify-end pt-2">
-          <a
-            href="/budget"
-            className="text-sm text-primary hover:underline"
-          >
+          <a href="/budget" className="text-sm text-primary hover:underline">
             Manage budgets →
           </a>
         </div>

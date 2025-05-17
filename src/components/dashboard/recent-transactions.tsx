@@ -1,32 +1,31 @@
-
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { formatCurrency } from "@/lib/finance-utils";
-import { useFinance } from "@/context/finance/finance-context";
 import { format } from "date-fns";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/context/auth-context";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useFinance } from "@/context/finance/use-finance";
 
 export function RecentTransactions() {
   const { state } = useFinance();
   const { user } = useAuth();
   const [currency, setCurrency] = useState<string>("VND");
-  
+
   // Get user currency preference
   useEffect(() => {
     const fetchUserCurrency = async () => {
       if (!user) return;
-      
+
       try {
         const { data, error } = await supabase
           .from("profiles")
           .select("currency")
           .eq("id", user.id)
           .single();
-          
+
         if (error) throw error;
         if (data && data.currency) {
           setCurrency(data.currency);
@@ -35,10 +34,10 @@ export function RecentTransactions() {
         console.error("Error fetching user currency:", error);
       }
     };
-    
+
     fetchUserCurrency();
   }, [user]);
-  
+
   const recentTransactions = state.transactions
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
     .slice(0, 5);

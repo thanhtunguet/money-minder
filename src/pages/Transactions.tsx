@@ -1,18 +1,23 @@
-
 import { useState } from "react";
 import { MainLayout } from "@/components/layout/main-layout";
-import { useFinance } from "@/context/finance/finance-context";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { formatCurrency } from "@/lib/finance-utils";
 import { format, parseISO } from "date-fns";
 import { EXPENSE_CATEGORIES, INCOME_CATEGORIES } from "@/lib/finance-utils";
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import { Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/context/auth-context";
 import { TransactionForm } from "@/components/transactions/transaction-form";
+import { useFinance } from "@/context";
 
 export default function Transactions() {
   const { state, isLoading, deleteTransaction } = useFinance();
@@ -21,8 +26,9 @@ export default function Transactions() {
   const { user } = useAuth();
 
   const handleDeleteTransaction = async (id: string) => {
-    if (!window.confirm("Are you sure you want to delete this transaction?")) return;
-    
+    if (!window.confirm("Are you sure you want to delete this transaction?"))
+      return;
+
     setIsDeleteLoading(id);
     try {
       await deleteTransaction(id);
@@ -76,7 +82,10 @@ export default function Transactions() {
         <TabsContent value={activeTab}>
           <Card>
             <CardHeader>
-              <CardTitle>{activeTab.charAt(0).toUpperCase() + activeTab.slice(1)} Transactions</CardTitle>
+              <CardTitle>
+                {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}{" "}
+                Transactions
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="overflow-auto">
@@ -99,13 +108,19 @@ export default function Transactions() {
                       </tr>
                     ) : sortedTransactions.length === 0 ? (
                       <tr>
-                        <td colSpan={5} className="text-center py-8 text-muted-foreground">
+                        <td
+                          colSpan={5}
+                          className="text-center py-8 text-muted-foreground"
+                        >
                           No transactions found
                         </td>
                       </tr>
                     ) : (
                       sortedTransactions.map((transaction) => (
-                        <tr key={transaction.id} className="border-b hover:bg-muted/50">
+                        <tr
+                          key={transaction.id}
+                          className="border-b hover:bg-muted/50"
+                        >
                           <td className="py-3 px-4">
                             {format(parseISO(transaction.date), "MMM dd, yyyy")}
                           </td>
@@ -114,13 +129,17 @@ export default function Transactions() {
                               {transaction.category}
                             </span>
                           </td>
-                          <td className="py-3 px-4">{transaction.description || "-"}</td>
-                          <td className={cn(
-                            "py-3 px-4 text-right font-medium",
-                            transaction.type === "income"
-                              ? "text-green-600 dark:text-green-500"
-                              : "text-red-600 dark:text-red-500"
-                          )}>
+                          <td className="py-3 px-4">
+                            {transaction.description || "-"}
+                          </td>
+                          <td
+                            className={cn(
+                              "py-3 px-4 text-right font-medium",
+                              transaction.type === "income"
+                                ? "text-green-600 dark:text-green-500"
+                                : "text-red-600 dark:text-red-500"
+                            )}
+                          >
                             {transaction.type === "income" ? "+" : "-"}
                             {formatCurrency(transaction.amount)}
                           </td>
@@ -128,7 +147,9 @@ export default function Transactions() {
                             <Button
                               variant="ghost"
                               size="sm"
-                              onClick={() => handleDeleteTransaction(transaction.id)}
+                              onClick={() =>
+                                handleDeleteTransaction(transaction.id)
+                              }
                               disabled={isDeleteLoading === transaction.id}
                             >
                               {isDeleteLoading === transaction.id ? (

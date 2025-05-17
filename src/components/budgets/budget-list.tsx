@@ -1,6 +1,4 @@
-
 import { useState } from "react";
-import { useFinance } from "@/context/finance/finance-context";
 import { formatCurrency } from "@/lib/finance-utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -9,7 +7,7 @@ import {
   TableCell,
   TableHead,
   TableHeader,
-  TableRow
+  TableRow,
 } from "@/components/ui/table";
 import {
   AlertDialog,
@@ -26,25 +24,26 @@ import { Edit, Trash2 } from "lucide-react";
 import { useAuth } from "@/context/auth-context";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/components/ui/use-toast";
+import { useFinance } from "@/context";
 
 export function BudgetList() {
   const { state, deleteBudget } = useFinance();
   const { user } = useAuth();
   const [currency, setCurrency] = useState<string>("VND");
   const [deletingBudgetId, setDeletingBudgetId] = useState<string | null>(null);
-  
+
   // Get user currency preference
   useState(() => {
     const fetchUserCurrency = async () => {
       if (!user) return;
-      
+
       try {
         const { data, error } = await supabase
           .from("profiles")
           .select("currency")
           .eq("id", user.id)
           .single();
-          
+
         if (error) throw error;
         if (data && data.currency) {
           setCurrency(data.currency);
@@ -53,10 +52,10 @@ export function BudgetList() {
         console.error("Error fetching user currency:", error);
       }
     };
-    
+
     fetchUserCurrency();
   });
-  
+
   const handleDeleteBudget = async (category: string) => {
     try {
       await deleteBudget(category);
@@ -78,7 +77,9 @@ export function BudgetList() {
   if (state.budgets.length === 0) {
     return (
       <div className="text-center py-10">
-        <p className="text-muted-foreground">No budgets found. Create your first budget to get started.</p>
+        <p className="text-muted-foreground">
+          No budgets found. Create your first budget to get started.
+        </p>
       </div>
     );
   }
@@ -103,7 +104,9 @@ export function BudgetList() {
                   {budget.category}
                 </span>
               </TableCell>
-              <TableCell className="font-medium">{budget.purpose || "-"}</TableCell>
+              <TableCell className="font-medium">
+                {budget.purpose || "-"}
+              </TableCell>
               <TableCell className="max-w-[200px] truncate">
                 {budget.description || "-"}
               </TableCell>
@@ -115,7 +118,7 @@ export function BudgetList() {
                   <Button variant="ghost" size="icon">
                     <Edit className="h-4 w-4" />
                   </Button>
-                  
+
                   <AlertDialog>
                     <AlertDialogTrigger asChild>
                       <Button variant="ghost" size="icon">
@@ -126,7 +129,8 @@ export function BudgetList() {
                       <AlertDialogHeader>
                         <AlertDialogTitle>Delete Budget</AlertDialogTitle>
                         <AlertDialogDescription>
-                          Are you sure you want to delete this budget? This action cannot be undone.
+                          Are you sure you want to delete this budget? This
+                          action cannot be undone.
                         </AlertDialogDescription>
                       </AlertDialogHeader>
                       <AlertDialogFooter>

@@ -1,5 +1,3 @@
-
-import { useFinance } from "@/context/finance/finance-context";
 import { getMonthlyTrends, formatCurrency } from "@/lib/finance-utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -12,11 +10,14 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
+import { useFinance } from "@/context/finance/use-finance";
 
 export function MonthlyChart() {
   const { state } = useFinance();
   // Make sure state.transactions exists before trying to process it
-  const trendData = state.transactions ? getMonthlyTrends(state.transactions) : [];
+  const trendData = state.transactions
+    ? getMonthlyTrends(state.transactions)
+    : [];
 
   return (
     <Card>
@@ -35,26 +36,32 @@ export function MonthlyChart() {
             }}
           >
             <CartesianGrid strokeDasharray="3 3" vertical={false} />
-            <XAxis 
-              dataKey="month" 
-              tickLine={false} 
-              axisLine={false} 
+            <XAxis dataKey="month" tickLine={false} axisLine={false} />
+            <YAxis
+              tickFormatter={(value) => `$${value}`}
+              tickLine={false}
+              axisLine={false}
             />
-            <YAxis 
-              tickFormatter={(value) => `$${value}`} 
-              tickLine={false} 
-              axisLine={false} 
-            />
-            <Tooltip 
+            <Tooltip
               formatter={(value) => formatCurrency(Number(value))}
-              contentStyle={{ 
-                backgroundColor: 'var(--background)',
-                border: '1px solid var(--border)' 
+              contentStyle={{
+                backgroundColor: "var(--background)",
+                border: "1px solid var(--border)",
               }}
             />
             <Legend />
-            <Bar dataKey="income" fill="var(--finance-income)" name="Income" radius={[4, 4, 0, 0]} />
-            <Bar dataKey="expenses" fill="var(--finance-expense)" name="Expenses" radius={[4, 4, 0, 0]} />
+            <Bar
+              dataKey="income"
+              fill="var(--finance-income)"
+              name="Income"
+              radius={[4, 4, 0, 0]}
+            />
+            <Bar
+              dataKey="expenses"
+              fill="var(--finance-expense)"
+              name="Expenses"
+              radius={[4, 4, 0, 0]}
+            />
           </BarChart>
         </ResponsiveContainer>
       </CardContent>

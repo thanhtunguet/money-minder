@@ -1,44 +1,66 @@
-
 import { useState, useEffect } from "react";
-import { useFinance } from "@/context/finance/finance-context";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from "recharts";
+import { useFinance } from "@/context";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  PieChart,
+  Pie,
+  Cell,
+  ResponsiveContainer,
+  Legend,
+  Tooltip,
+} from "recharts";
 import { getExpensesByCategory, formatCurrency } from "@/lib/finance-utils";
 import { useAuth } from "@/context/auth-context";
 import { supabase } from "@/integrations/supabase/client";
 
 // Color array for the pie chart slices
 const COLORS = [
-  "#8884d8", "#82ca9d", "#ffc658", "#ff8042", "#0088fe", 
-  "#00c49f", "#ff5722", "#673ab7", "#3f51b5", "#e91e63"
+  "#8884d8",
+  "#82ca9d",
+  "#ffc658",
+  "#ff8042",
+  "#0088fe",
+  "#00c49f",
+  "#ff5722",
+  "#673ab7",
+  "#3f51b5",
+  "#e91e63",
 ];
 
 export function ExpenseBreakdownReport() {
   const { state } = useFinance();
   const { user } = useAuth();
   const [currency, setCurrency] = useState<string>("VND");
-  
+
   // Get expense breakdown data
   const expensesByCategory = getExpensesByCategory(state.transactions);
-  
+
   // Format data for the pie chart
-  const chartData = Object.entries(expensesByCategory).map(([category, amount]) => ({
-    name: category,
-    value: amount
-  }));
-  
+  const chartData = Object.entries(expensesByCategory).map(
+    ([category, amount]) => ({
+      name: category,
+      value: amount,
+    })
+  );
+
   // Get user currency preference
   useEffect(() => {
     const fetchUserCurrency = async () => {
       if (!user) return;
-      
+
       try {
         const { data, error } = await supabase
           .from("profiles")
           .select("currency")
           .eq("id", user.id)
           .single();
-          
+
         if (error) throw error;
         if (data && data.currency) {
           setCurrency(data.currency);
@@ -47,10 +69,10 @@ export function ExpenseBreakdownReport() {
         console.error("Error fetching user currency:", error);
       }
     };
-    
+
     fetchUserCurrency();
   }, [user]);
-  
+
   // Custom tooltip for the chart
   const CustomTooltip = ({ active, payload }: any) => {
     if (active && payload && payload.length) {
@@ -63,7 +85,7 @@ export function ExpenseBreakdownReport() {
     }
     return null;
   };
-  
+
   if (chartData.length === 0) {
     return (
       <Card>
@@ -102,7 +124,10 @@ export function ExpenseBreakdownReport() {
                 dataKey="value"
               >
                 {chartData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={COLORS[index % COLORS.length]}
+                  />
                 ))}
               </Pie>
               <Tooltip content={<CustomTooltip />} />

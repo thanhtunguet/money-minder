@@ -4,7 +4,7 @@ import { BudgetForm } from "@/components/budgets/budget-form";
 import { BudgetList } from "@/components/budgets/budget-list";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
-import { 
+import {
   Sheet,
   SheetContent,
   SheetDescription,
@@ -12,16 +12,16 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { useFinance } from "@/context/finance/finance-context";
+import { useFinance } from "@/context";
 
 export default function Budgets() {
   const [open, setOpen] = useState(false);
   const { isLoading } = useFinance();
-  
+
   const handleSuccess = () => {
     setOpen(false);
   };
-  
+
   if (isLoading) {
     return (
       <MainLayout currentPage="budgets">
@@ -31,18 +31,20 @@ export default function Budgets() {
       </MainLayout>
     );
   }
-  
+
   return (
     <MainLayout currentPage="budgets">
       <div className="space-y-8">
         <header className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">Budget Management</h1>
+            <h1 className="text-3xl font-bold tracking-tight">
+              Budget Management
+            </h1>
             <p className="text-muted-foreground">
               Create and manage your budgets to track spending goals.
             </p>
           </div>
-          
+
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>
               <Button className="flex items-center gap-2">
@@ -62,7 +64,7 @@ export default function Budgets() {
             </SheetContent>
           </Sheet>
         </header>
-        
+
         <div className="rounded-lg border">
           <BudgetList />
         </div>
