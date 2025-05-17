@@ -1,5 +1,6 @@
-
 import { format, subMonths, isSameMonth, parseISO } from 'date-fns';
+import { useAuth } from '@/context/auth-context';
+import { supabase } from '@/integrations/supabase/client';
 
 // Types from context
 type Transaction = {
@@ -16,11 +17,24 @@ type Budget = {
   amount: number;
 };
 
-// Format currency
-export const formatCurrency = (amount: number): string => {
-  return new Intl.NumberFormat('en-US', {
+// Currency mapping
+const CURRENCY_SYMBOLS: Record<string, { symbol: string; locale: string }> = {
+  USD: { symbol: '$', locale: 'en-US' },
+  EUR: { symbol: '€', locale: 'de-DE' },
+  GBP: { symbol: '£', locale: 'en-GB' },
+  JPY: { symbol: '¥', locale: 'ja-JP' },
+  CNY: { symbol: '¥', locale: 'zh-CN' },
+  VND: { symbol: '₫', locale: 'vi-VN' },
+};
+
+// Format currency based on user preference
+export const formatCurrency = (amount: number, currencyCode: string = 'VND'): string => {
+  const currencyInfo = CURRENCY_SYMBOLS[currencyCode] || CURRENCY_SYMBOLS.VND;
+  
+  return new Intl.NumberFormat(currencyInfo.locale, {
     style: 'currency',
-    currency: 'USD',
+    currency: currencyCode,
+    minimumFractionDigits: currencyCode === 'VND' ? 0 : 2,
   }).format(amount);
 };
 

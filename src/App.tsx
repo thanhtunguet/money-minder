@@ -11,6 +11,8 @@ import { RequireAuth } from "@/components/auth/require-auth";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
+import Transactions from "./pages/Transactions";
+import Settings from "./pages/Settings";
 
 const queryClient = new QueryClient();
 
@@ -33,6 +35,28 @@ const App = () => (
                   <RequireAuth>
                     <FinanceProvider>
                       <Index />
+                    </FinanceProvider>
+                  </RequireAuth>
+                } 
+              />
+
+              <Route 
+                path="/transactions" 
+                element={
+                  <RequireAuth>
+                    <FinanceProvider>
+                      <Transactions />
+                    </FinanceProvider>
+                  </RequireAuth>
+                } 
+              />
+
+              <Route 
+                path="/settings" 
+                element={
+                  <RequireAuth>
+                    <FinanceProvider>
+                      <Settings />
                     </FinanceProvider>
                   </RequireAuth>
                 } 

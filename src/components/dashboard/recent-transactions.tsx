@@ -1,11 +1,41 @@
 
+import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { formatCurrency } from "@/lib/finance-utils";
 import { useFinance } from "@/context/finance-context";
 import { format } from "date-fns";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/context/auth-context";
 
 export function RecentTransactions() {
   const { state } = useFinance();
+  const { user } = useAuth();
+  const [currency, setCurrency] = useState<string>("VND");
+  
+  // Get user currency preference
+  useEffect(() => {
+    const fetchUserCurrency = async () => {
+      if (!user) return;
+      
+      try {
+        const { data, error } = await supabase
+          .from("profiles")
+          .select("currency")
+          .eq("id", user.id)
+          .single();
+          
+        if (error) throw error;
+        if (data && data.currency) {
+          setCurrency(data.currency);
+        }
+      } catch (error) {
+        console.error("Error fetching user currency:", error);
+      }
+    };
+    
+    fetchUserCurrency();
+  }, [user]);
+  
   const recentTransactions = state.transactions
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
     .slice(0, 5);
@@ -38,12 +68,12 @@ export function RecentTransactions() {
                 className={cn(
                   "col-span-3 px-4 text-right font-medium",
                   transaction.type === "income"
-                    ? "text-finance-income"
-                    : "text-finance-expense"
+                    ? "text-green-600 dark:text-green-500"
+                    : "text-red-600 dark:text-red-500"
                 )}
               >
                 {transaction.type === "income" ? "+" : "-"}
-                {formatCurrency(transaction.amount)}
+                {formatCurrency(transaction.amount, currency)}
               </div>
             </div>
           ))
