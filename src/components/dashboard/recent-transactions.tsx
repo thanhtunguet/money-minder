@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { formatCurrency } from "@/lib/finance-utils";
-import { useFinance } from "@/context/finance-context";
+import { useFinance } from "@/context/finance/finance-context";
 import { format } from "date-fns";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/context/auth-context";

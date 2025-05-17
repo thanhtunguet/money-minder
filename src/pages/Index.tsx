@@ -1,5 +1,5 @@
 
-import { useFinance } from "@/context/finance-context";
+import { useFinance } from "@/context/finance/finance-context";
 import { useAuth } from "@/context/auth-context";
 import { MainLayout } from "@/components/layout/main-layout";
 import { ThemeProvider } from "@/components/theme-provider";

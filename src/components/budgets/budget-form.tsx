@@ -3,7 +3,7 @@ import { useState } from "react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useFinance } from "@/context/finance-context";
+import { useFinance } from "@/context/finance/finance-context";
 import { EXPENSE_CATEGORIES } from "@/lib/finance-utils";
 import { Button } from "@/components/ui/button";
 import {

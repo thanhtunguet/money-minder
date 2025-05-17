@@ -1,6 +1,7 @@
+
 import { useState } from "react";
 import { MainLayout } from "@/components/layout/main-layout";
-import { useFinance } from "@/context/finance-context";
+import { useFinance } from "@/context/finance/finance-context";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";

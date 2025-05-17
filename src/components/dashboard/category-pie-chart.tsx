@@ -1,5 +1,5 @@
 
-import { useFinance } from "@/context/finance-context";
+import { useFinance } from "@/context/finance/finance-context";
 import { getExpensesByCategory, formatCurrency } from "@/lib/finance-utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {

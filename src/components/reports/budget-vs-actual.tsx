@@ -1,6 +1,6 @@
 
 import { useEffect, useState } from "react";
-import { useFinance } from "@/context/finance-context";
+import { useFinance } from "@/context/finance/finance-context";
 import { getBudgetVsActual, formatCurrency } from "@/lib/finance-utils";
 import { Progress } from "@/components/ui/progress";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";

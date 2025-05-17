@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from "react";
-import { useFinance } from "@/context/finance-context";
+import { useFinance } from "@/context/finance/finance-context";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from "recharts";
 import { getExpensesByCategory, formatCurrency } from "@/lib/finance-utils";

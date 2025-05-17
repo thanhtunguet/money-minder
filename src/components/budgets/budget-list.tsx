@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { useFinance } from "@/context/finance-context";
+import { useFinance } from "@/context/finance/finance-context";
 import { formatCurrency } from "@/lib/finance-utils";
 import { Button } from "@/components/ui/button";
 import {

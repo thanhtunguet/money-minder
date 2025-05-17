@@ -1,6 +1,6 @@
 
 import { MainLayout } from "@/components/layout/main-layout";
-import { useFinance } from "@/context/finance-context";
+import { useFinance } from "@/context/finance/finance-context";
 import { BudgetVsActualReport } from "@/components/reports/budget-vs-actual";
 import { SpendingTrendReport } from "@/components/reports/spending-trend";
 import { ExpenseBreakdownReport } from "@/components/reports/expense-breakdown";
