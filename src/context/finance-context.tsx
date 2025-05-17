@@ -17,6 +17,8 @@ type Transaction = {
 type Budget = {
   category: string;
   amount: number;
+  purpose?: string;
+  description?: string;
 };
 
 type FinanceState = {
@@ -248,6 +250,8 @@ export function FinanceProvider({ children }: { children: ReactNode }) {
         .insert({ 
           category: budget.category, 
           amount: budget.amount, 
+          purpose: budget.purpose,
+          description: budget.description,
           user_id: user?.id 
         })
         .select('*')
@@ -268,6 +272,7 @@ export function FinanceProvider({ children }: { children: ReactNode }) {
         description: "Failed to add budget",
         variant: "destructive",
       });
+      throw error;
     }
   };
 
@@ -293,6 +298,7 @@ export function FinanceProvider({ children }: { children: ReactNode }) {
         description: "Failed to delete budget",
         variant: "destructive",
       });
+      throw error;
     }
   };
 
@@ -300,7 +306,11 @@ export function FinanceProvider({ children }: { children: ReactNode }) {
     try {
       const { error } = await supabase
         .from('budgets')
-        .update({ amount: budget.amount })
+        .update({ 
+          amount: budget.amount,
+          purpose: budget.purpose,
+          description: budget.description
+        })
         .eq('category', budget.category);
 
       if (error) throw error;
@@ -318,6 +328,7 @@ export function FinanceProvider({ children }: { children: ReactNode }) {
         description: "Failed to update budget",
         variant: "destructive",
       });
+      throw error;
     }
   };
 

@@ -13,6 +13,8 @@ import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
 import Transactions from "./pages/Transactions";
 import Settings from "./pages/Settings";
+import Budgets from "./pages/Budgets";
+import Reports from "./pages/Reports";
 
 import "./styles.css"; // Import the global styles
 
@@ -59,6 +61,28 @@ const App = () => (
                   <RequireAuth>
                     <FinanceProvider>
                       <Settings />
+                    </FinanceProvider>
+                  </RequireAuth>
+                } 
+              />
+              
+              <Route 
+                path="/budgets" 
+                element={
+                  <RequireAuth>
+                    <FinanceProvider>
+                      <Budgets />
+                    </FinanceProvider>
+                  </RequireAuth>
+                } 
+              />
+              
+              <Route 
+                path="/reports" 
+                element={
+                  <RequireAuth>
+                    <FinanceProvider>
+                      <Reports />
                     </FinanceProvider>
                   </RequireAuth>
                 } 
