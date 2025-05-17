@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { MainLayout } from "@/components/layout/main-layout";
 import { useFinance } from "@/context/finance-context";
@@ -12,6 +11,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/co
 import { Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/context/auth-context";
+import { TransactionForm } from "@/components/transactions/transaction-form";
 
 export default function Transactions() {
   const { state, isLoading, deleteTransaction } = useFinance();
@@ -59,11 +59,7 @@ export default function Transactions() {
               <SheetTitle>Add Transaction</SheetTitle>
             </SheetHeader>
             <div className="py-6">
-              {/* We'll hook up the transaction form component here */}
-              {/* For now, I'm just showing a placeholder message */}
-              <p className="text-muted-foreground">
-                Transaction form will be integrated here
-              </p>
+              <TransactionForm />
             </div>
           </SheetContent>
         </Sheet>

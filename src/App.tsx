@@ -14,6 +14,8 @@ import NotFound from "./pages/NotFound";
 import Transactions from "./pages/Transactions";
 import Settings from "./pages/Settings";
 
+import "./styles.css"; // Import the global styles
+
 const queryClient = new QueryClient();
 
 const App = () => (

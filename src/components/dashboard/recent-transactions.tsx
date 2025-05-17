@@ -6,6 +6,9 @@ import { useFinance } from "@/context/finance-context";
 import { format } from "date-fns";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/context/auth-context";
+import { Button } from "@/components/ui/button";
+import { Plus } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export function RecentTransactions() {
   const { state } = useFinance();
@@ -42,7 +45,14 @@ export function RecentTransactions() {
 
   return (
     <div className="space-y-4">
-      <h3 className="font-medium">Recent Transactions</h3>
+      <div className="flex items-center justify-between">
+        <h3 className="font-medium">Recent Transactions</h3>
+        <Link to="/transactions">
+          <Button variant="ghost" size="sm" className="flex items-center gap-1">
+            <Plus className="h-4 w-4" /> Add
+          </Button>
+        </Link>
+      </div>
       <div className="border rounded-lg">
         <div className="transaction-row-header">
           <div className="col-span-2 px-4">Date</div>
@@ -84,12 +94,12 @@ export function RecentTransactions() {
         )}
       </div>
       <div className="flex justify-end">
-        <a
-          href="/transactions"
+        <Link
+          to="/transactions"
           className="text-sm text-primary hover:underline"
         >
           View all transactions →
-        </a>
+        </Link>
       </div>
     </div>
   );
