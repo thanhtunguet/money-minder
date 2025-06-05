@@ -7,10 +7,12 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Label } from "@/components/ui/label";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { useAuth } from "@/context/auth-context";
+import { GoogleAuthButton } from "@/components/auth/google-auth-button";
+import { Separator } from "@/components/ui/separator";
 
 export default function Auth() {
   const navigate = useNavigate();
@@ -24,7 +26,6 @@ export default function Auth() {
   // Redirect if user is already logged in
   useEffect(() => {
     if (user) {
-      // Get the intended destination or default to home
       const from = location.state?.from?.pathname || "/";
       navigate(from, { replace: true });
     }
@@ -36,6 +37,9 @@ export default function Auth() {
       const { error } = await supabase.auth.signUp({
         email,
         password,
+        options: {
+          emailRedirectTo: `${window.location.origin}/`,
+        },
       });
       
       if (error) {
@@ -77,7 +81,6 @@ export default function Auth() {
           variant: "destructive",
         });
       } else {
-        // Success is handled by the auth context and useEffect above
         toast({
           title: "Welcome back!",
           description: "Successfully logged in.",
@@ -95,7 +98,6 @@ export default function Auth() {
     }
   }
 
-  // If we're already logged in, show a loading state
   if (user) {
     return (
       <div className="h-screen w-full flex items-center justify-center">
@@ -112,19 +114,31 @@ export default function Auth() {
         </div>
         
         <Card className="w-full max-w-md">
-          <CardHeader className="text-center">
+          <CardHeader className="text-center space-y-2">
             <CardTitle className="text-2xl font-bold">MoneyMinder</CardTitle>
             <CardDescription>Manage your finances with ease</CardDescription>
           </CardHeader>
           
           <Tabs defaultValue="signin" className="w-full">
-            <TabsList className="grid grid-cols-2 mb-4 w-full">
+            <TabsList className="grid grid-cols-2 mb-6 w-full mx-6">
               <TabsTrigger value="signin">Sign In</TabsTrigger>
               <TabsTrigger value="signup">Sign Up</TabsTrigger>
             </TabsList>
             
             <TabsContent value="signin">
               <CardContent className="space-y-4">
+                {/* Google Sign In */}
+                <GoogleAuthButton />
+                
+                <div className="relative my-4">
+                  <Separator />
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <span className="bg-background px-2 text-xs text-muted-foreground">
+                      or continue with email
+                    </span>
+                  </div>
+                </div>
+
                 <div className="space-y-2">
                   <Label htmlFor="email">Email</Label>
                   <Input 
@@ -150,6 +164,7 @@ export default function Auth() {
                   className="w-full" 
                   onClick={handleSignIn}
                   disabled={loading}
+                  size="lg"
                 >
                   {loading ? "Signing in..." : "Sign In"}
                 </Button>
@@ -158,6 +173,18 @@ export default function Auth() {
             
             <TabsContent value="signup">
               <CardContent className="space-y-4">
+                {/* Google Sign In */}
+                <GoogleAuthButton />
+                
+                <div className="relative my-4">
+                  <Separator />
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <span className="bg-background px-2 text-xs text-muted-foreground">
+                      or continue with email
+                    </span>
+                  </div>
+                </div>
+
                 <div className="space-y-2">
                   <Label htmlFor="signup-email">Email</Label>
                   <Input 
@@ -183,6 +210,7 @@ export default function Auth() {
                   className="w-full" 
                   onClick={handleSignUp}
                   disabled={loading}
+                  size="lg"
                 >
                   {loading ? "Signing up..." : "Sign Up"}
                 </Button>

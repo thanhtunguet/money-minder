@@ -1,108 +1,107 @@
-import { useAuth } from "@/context/auth-context";
+
+import { useIsMobile } from "@/hooks/use-mobile";
 import { MainLayout } from "@/components/layout/main-layout";
-import { ThemeProvider } from "@/components/theme-provider";
+import { MobileDashboard } from "@/components/mobile/mobile-dashboard";
 import { StatCard } from "@/components/dashboard/stat-card";
-import { RecentTransactions } from "@/components/dashboard/recent-transactions";
 import { MonthlyChart } from "@/components/dashboard/monthly-chart";
 import { CategoryPieChart } from "@/components/dashboard/category-pie-chart";
+import { RecentTransactions } from "@/components/dashboard/recent-transactions";
 import { BudgetProgress } from "@/components/dashboard/budget-progress";
-import { TransactionForm } from "@/components/transactions/transaction-form";
-import {
-  getNetBalance,
-  getTotalIncome,
-  getTotalExpenses,
-  formatCurrency,
-} from "@/lib/finance-utils";
-import {
-  ArrowUpRight,
-  ArrowDownRight,
-  WalletCards,
-  Wallet,
-} from "lucide-react";
 import { useFinance } from "@/context";
+import { formatCurrency } from "@/lib/finance-utils";
+import { TrendingUp, TrendingDown, DollarSign, Target } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useAuth } from "@/context/auth-context";
 
-const Index = () => {
+export default function Index() {
+  const isMobile = useIsMobile();
   const { state, isLoading } = useFinance();
   const { signOut } = useAuth();
 
-  const totalIncome = getTotalIncome(state.transactions);
-  const totalExpenses = getTotalExpenses(state.transactions);
-  const netBalance = getNetBalance(state.transactions);
-
   if (isLoading) {
     return (
-      <ThemeProvider defaultTheme="system" storageKey="moneyminder-theme">
-        <MainLayout currentPage="dashboard">
-          <div className="h-[80vh] w-full flex items-center justify-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-          </div>
-        </MainLayout>
-      </ThemeProvider>
+      <MainLayout currentPage="dashboard">
+        <div className="h-[80vh] w-full flex items-center justify-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+        </div>
+      </MainLayout>
     );
   }
 
-  return (
-    <ThemeProvider defaultTheme="system" storageKey="moneyminder-theme">
-      <MainLayout
-        currentPage="dashboard"
-        userActions={
-          <button
-            onClick={() => signOut()}
-            className="text-sm text-muted-foreground hover:text-foreground"
-          >
-            Sign Out
-          </button>
-        }
-      >
-        <div className="space-y-8">
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-            <StatCard
-              title="Total Balance"
-              value={formatCurrency(netBalance)}
-              icon={<Wallet className="h-4 w-4" />}
-            />
-            <StatCard
-              title="Income"
-              value={formatCurrency(totalIncome)}
-              trend={{ value: 12, isPositive: true }}
-              icon={<ArrowUpRight className="h-4 w-4" />}
-            />
-            <StatCard
-              title="Expenses"
-              value={formatCurrency(totalExpenses)}
-              trend={{ value: 5, isPositive: false }}
-              icon={<ArrowDownRight className="h-4 w-4" />}
-            />
-            <StatCard
-              title="Monthly Budget"
-              value={formatCurrency(
-                state.budgets.reduce((acc, budget) => acc + budget.amount, 0)
-              )}
-              icon={<WalletCards className="h-4 w-4" />}
-            />
-          </div>
+  // If mobile, use the mobile-optimized dashboard
+  if (isMobile) {
+    return <MobileDashboard />;
+  }
 
-          <div className="grid gap-4 md:grid-cols-2">
-            <MonthlyChart />
-            <CategoryPieChart />
-          </div>
+  // Desktop dashboard layout
+  const totalIncome = state.transactions
+    .filter((t) => t.type === "income")
+    .reduce((sum, t) => sum + t.amount, 0);
 
-          <div className="grid gap-4 md:grid-cols-2">
-            <div>
-              <RecentTransactions />
-            </div>
-            <div>
-              <BudgetProgress />
-            </div>
-          </div>
+  const totalExpenses = state.transactions
+    .filter((t) => t.type === "expense")
+    .reduce((sum, t) => sum + t.amount, 0);
 
-          <div>
-            <TransactionForm />
-          </div>
-        </div>
-      </MainLayout>
-    </ThemeProvider>
+  const balance = totalIncome - totalExpenses;
+
+  const totalBudget = state.budgets.reduce((sum, budget) => sum + budget.amount, 0);
+
+  const userActions = (
+    <Button variant="ghost" size="sm" onClick={signOut}>
+      Sign Out
+    </Button>
   );
-};
 
-export default Index;
+  return (
+    <MainLayout currentPage="dashboard" userActions={userActions}>
+      <div className="space-y-8">
+        <header>
+          <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
+          <p className="text-muted-foreground">
+            Welcome back! Here's your financial overview.
+          </p>
+        </header>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <StatCard
+            title="Total Balance"
+            value={formatCurrency(balance)}
+            description="Current balance"
+            icon={DollarSign}
+          />
+          <StatCard
+            title="Total Income"
+            value={formatCurrency(totalIncome)}
+            description="This period"
+            icon={TrendingUp}
+            className="text-green-600"
+          />
+          <StatCard
+            title="Total Expenses"
+            value={formatCurrency(totalExpenses)}
+            description="This period"
+            icon={TrendingDown}
+            className="text-red-600"
+          />
+          <StatCard
+            title="Total Budget"
+            value={formatCurrency(totalBudget)}
+            description="Allocated budget"
+            icon={Target}
+            className="text-blue-600"
+          />
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <MonthlyChart />
+          <CategoryPieChart />
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <RecentTransactions />
+          <BudgetProgress />
+        </div>
+      </div>
+    </MainLayout>
+  );
+}
