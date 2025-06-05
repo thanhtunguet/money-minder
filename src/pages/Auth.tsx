@@ -114,57 +114,61 @@ export default function Auth() {
         </div>
         
         <Card className="w-full max-w-md">
-          <CardHeader className="text-center space-y-2">
-            <CardTitle className="text-2xl font-bold">MoneyMinder</CardTitle>
-            <CardDescription>Manage your finances with ease</CardDescription>
+          <CardHeader className="text-center space-y-4 pb-8">
+            <div className="mx-auto bg-primary rounded-full p-3 w-16 h-16 flex items-center justify-center">
+              <Wallet className="w-8 h-8 text-primary-foreground" />
+            </div>
+            <CardTitle className="text-3xl font-bold">MoneyMinder</CardTitle>
+            <CardDescription className="text-base">Manage your finances with ease</CardDescription>
           </CardHeader>
           
           <Tabs defaultValue="signin" className="w-full">
-            <TabsList className="grid grid-cols-2 mb-6 w-full mx-6">
-              <TabsTrigger value="signin">Sign In</TabsTrigger>
-              <TabsTrigger value="signup">Sign Up</TabsTrigger>
+            <TabsList className="grid grid-cols-2 mb-8 w-full mx-6 h-12">
+              <TabsTrigger value="signin" className="text-base py-3">Sign In</TabsTrigger>
+              <TabsTrigger value="signup" className="text-base py-3">Sign Up</TabsTrigger>
             </TabsList>
             
             <TabsContent value="signin">
-              <CardContent className="space-y-4">
+              <CardContent className="space-y-6">
                 {/* Google Sign In */}
                 <GoogleAuthButton />
                 
-                <div className="relative my-4">
+                <div className="relative my-6">
                   <Separator />
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="bg-background px-2 text-xs text-muted-foreground">
+                    <span className="bg-background px-3 text-sm text-muted-foreground">
                       or continue with email
                     </span>
                   </div>
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="email">Email</Label>
+                <div className="space-y-3">
+                  <Label htmlFor="email" className="text-base">Email</Label>
                   <Input 
                     id="email"
                     type="email" 
                     placeholder="your.email@example.com" 
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
+                    className="h-12 text-base"
                   />
                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor="password">Password</Label>
+                <div className="space-y-3">
+                  <Label htmlFor="password" className="text-base">Password</Label>
                   <Input 
                     id="password"
                     type="password" 
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
+                    className="h-12 text-base"
                   />
                 </div>
               </CardContent>
-              <CardFooter>
+              <CardFooter className="pt-2">
                 <Button 
-                  className="w-full" 
+                  className="w-full h-12 text-base font-medium" 
                   onClick={handleSignIn}
                   disabled={loading}
-                  size="lg"
                 >
                   {loading ? "Signing in..." : "Sign In"}
                 </Button>
@@ -172,45 +176,46 @@ export default function Auth() {
             </TabsContent>
             
             <TabsContent value="signup">
-              <CardContent className="space-y-4">
+              <CardContent className="space-y-6">
                 {/* Google Sign In */}
                 <GoogleAuthButton />
                 
-                <div className="relative my-4">
+                <div className="relative my-6">
                   <Separator />
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="bg-background px-2 text-xs text-muted-foreground">
+                    <span className="bg-background px-3 text-sm text-muted-foreground">
                       or continue with email
                     </span>
                   </div>
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="signup-email">Email</Label>
+                <div className="space-y-3">
+                  <Label htmlFor="signup-email" className="text-base">Email</Label>
                   <Input 
                     id="signup-email"
                     type="email" 
                     placeholder="your.email@example.com" 
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
+                    className="h-12 text-base"
                   />
                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor="signup-password">Password</Label>
+                <div className="space-y-3">
+                  <Label htmlFor="signup-password" className="text-base">Password</Label>
                   <Input 
                     id="signup-password"
                     type="password" 
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
+                    className="h-12 text-base"
                   />
                 </div>
               </CardContent>
-              <CardFooter>
+              <CardFooter className="pt-2">
                 <Button 
-                  className="w-full" 
+                  className="w-full h-12 text-base font-medium" 
                   onClick={handleSignUp}
                   disabled={loading}
-                  size="lg"
                 >
                   {loading ? "Signing up..." : "Sign Up"}
                 </Button>

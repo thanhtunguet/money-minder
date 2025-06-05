@@ -72,21 +72,19 @@ export function QuickTransactionForm() {
   const categories = formData.type === "expense" ? EXPENSE_CATEGORIES : INCOME_CATEGORIES;
 
   return (
-    <Card className="w-full max-w-sm mx-auto">
-      <CardHeader className="pb-3">
-        <CardTitle className="text-lg text-center">Quick Add</CardTitle>
-      </CardHeader>
-      <form onSubmit={handleSubmit}>
-        <CardContent className="space-y-4">
-          {/* Transaction Type Toggle */}
-          <div className="flex rounded-lg border p-1">
+    <div className="w-full max-w-md mx-auto">
+      <form onSubmit={handleSubmit} className="space-y-6">
+        {/* Transaction Type Toggle */}
+        <div className="space-y-3">
+          <Label className="text-base font-medium">Transaction Type</Label>
+          <div className="flex rounded-lg border p-1 bg-muted">
             <button
               type="button"
               onClick={() => setFormData(prev => ({ ...prev, type: "expense", category: "" }))}
               className={cn(
-                "flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-md text-sm font-medium transition-colors",
+                "flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-md text-sm font-medium transition-all duration-200",
                 formData.type === "expense"
-                  ? "bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-100"
+                  ? "bg-red-500 text-white shadow-sm"
                   : "text-muted-foreground hover:text-foreground"
               )}
             >
@@ -97,9 +95,9 @@ export function QuickTransactionForm() {
               type="button"
               onClick={() => setFormData(prev => ({ ...prev, type: "income", category: "" }))}
               className={cn(
-                "flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-md text-sm font-medium transition-colors",
+                "flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-md text-sm font-medium transition-all duration-200",
                 formData.type === "income"
-                  ? "bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-100"
+                  ? "bg-green-500 text-white shadow-sm"
                   : "text-muted-foreground hover:text-foreground"
               )}
             >
@@ -107,10 +105,13 @@ export function QuickTransactionForm() {
               Income
             </button>
           </div>
+        </div>
 
-          {/* Amount Input */}
-          <div className="space-y-2">
-            <Label htmlFor="amount" className="text-sm">Amount</Label>
+        {/* Amount Input */}
+        <div className="space-y-3">
+          <Label htmlFor="amount" className="text-base font-medium">Amount</Label>
+          <div className="relative">
+            <span className="absolute left-4 top-1/2 transform -translate-y-1/2 text-muted-foreground text-lg">$</span>
             <Input
               id="amount"
               type="text"
@@ -118,49 +119,49 @@ export function QuickTransactionForm() {
               placeholder="0.00"
               value={formData.amount}
               onChange={handleAmountChange}
-              className="text-lg text-center font-semibold"
+              className="text-2xl font-semibold text-center h-14 pl-8"
               required
             />
           </div>
+        </div>
 
-          {/* Category Selection */}
-          <div className="space-y-2">
-            <Label htmlFor="category" className="text-sm">Category</Label>
-            <Select
-              value={formData.category}
-              onValueChange={(value) => setFormData(prev => ({ ...prev, category: value }))}
-            >
-              <SelectTrigger id="category">
-                <SelectValue placeholder="Select category" />
-              </SelectTrigger>
-              <SelectContent>
-                {categories.map((category) => (
-                  <SelectItem key={category} value={category}>
-                    {category}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
+        {/* Category Selection */}
+        <div className="space-y-3">
+          <Label htmlFor="category" className="text-base font-medium">Category</Label>
+          <Select
+            value={formData.category}
+            onValueChange={(value) => setFormData(prev => ({ ...prev, category: value }))}
+          >
+            <SelectTrigger id="category" className="h-12 text-base">
+              <SelectValue placeholder="Select category" />
+            </SelectTrigger>
+            <SelectContent>
+              {categories.map((category) => (
+                <SelectItem key={category} value={category} className="text-base py-3">
+                  {category}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
 
-          {/* Description Input */}
-          <div className="space-y-2">
-            <Label htmlFor="description" className="text-sm">Description (optional)</Label>
-            <Input
-              id="description"
-              placeholder="Add note..."
-              value={formData.description}
-              onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
-              className="text-sm"
-            />
-          </div>
+        {/* Description Input */}
+        <div className="space-y-3">
+          <Label htmlFor="description" className="text-base font-medium">Description (optional)</Label>
+          <Input
+            id="description"
+            placeholder="Add note..."
+            value={formData.description}
+            onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
+            className="h-12 text-base"
+          />
+        </div>
 
-          {/* Submit Button */}
-          <Button type="submit" className="w-full" size="lg">
-            Add Transaction
-          </Button>
-        </CardContent>
+        {/* Submit Button */}
+        <Button type="submit" className="w-full h-14 text-lg font-semibold mt-8">
+          Add Transaction
+        </Button>
       </form>
-    </Card>
+    </div>
   );
 }
