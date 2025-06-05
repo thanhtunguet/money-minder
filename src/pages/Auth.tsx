@@ -114,115 +114,117 @@ export default function Auth() {
           <ThemeToggle />
         </div>
         
-        <Card className="w-full max-w-md">
-          <CardHeader className="text-center space-y-4 pb-8">
+        <Card className="w-full max-w-md mx-auto">
+          <CardHeader className="text-center space-y-4 pb-6">
             <div className="mx-auto bg-primary rounded-full p-3 w-16 h-16 flex items-center justify-center">
               <Wallet className="w-8 h-8 text-primary-foreground" />
             </div>
-            <CardTitle className="text-3xl font-bold">MoneyMinder</CardTitle>
-            <CardDescription className="text-base">Manage your finances with ease</CardDescription>
+            <CardTitle className="text-2xl font-bold">MoneyMinder</CardTitle>
+            <CardDescription className="text-sm">Manage your finances with ease</CardDescription>
           </CardHeader>
           
-          <Tabs defaultValue="signin" className="w-full">
-            <TabsList className="grid grid-cols-2 mb-8 w-full mx-6 h-12">
-              <TabsTrigger value="signin" className="text-base py-3">Sign In</TabsTrigger>
-              <TabsTrigger value="signup" className="text-base py-3">Sign Up</TabsTrigger>
-            </TabsList>
-            
-            <TabsContent value="signin">
-              <CardContent className="space-y-6">
-                {/* Google Sign In */}
-                <GoogleAuthButton />
-                
-                <div className="relative my-6">
-                  <Separator />
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="bg-background px-3 text-sm text-muted-foreground">
-                      or continue with email
-                    </span>
+          <div className="px-6">
+            <Tabs defaultValue="signin" className="w-full">
+              <TabsList className="grid grid-cols-2 mb-6 w-full h-10">
+                <TabsTrigger value="signin" className="text-sm py-2">Sign In</TabsTrigger>
+                <TabsTrigger value="signup" className="text-sm py-2">Sign Up</TabsTrigger>
+              </TabsList>
+              
+              <TabsContent value="signin">
+                <CardContent className="space-y-4 p-0">
+                  {/* Google Sign In */}
+                  <GoogleAuthButton />
+                  
+                  <div className="relative my-4">
+                    <Separator />
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <span className="bg-background px-2 text-xs text-muted-foreground">
+                        or continue with email
+                      </span>
+                    </div>
                   </div>
-                </div>
 
-                <div className="space-y-3">
-                  <Label htmlFor="email" className="text-base">Email</Label>
-                  <Input 
-                    id="email"
-                    type="email" 
-                    placeholder="your.email@example.com" 
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="h-12 text-base"
-                  />
-                </div>
-                <div className="space-y-3">
-                  <Label htmlFor="password" className="text-base">Password</Label>
-                  <Input 
-                    id="password"
-                    type="password" 
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="h-12 text-base"
-                  />
-                </div>
-              </CardContent>
-              <CardFooter className="pt-2">
-                <Button 
-                  className="w-full h-12 text-base font-medium" 
-                  onClick={handleSignIn}
-                  disabled={loading}
-                >
-                  {loading ? "Signing in..." : "Sign In"}
-                </Button>
-              </CardFooter>
-            </TabsContent>
-            
-            <TabsContent value="signup">
-              <CardContent className="space-y-6">
-                {/* Google Sign In */}
-                <GoogleAuthButton />
-                
-                <div className="relative my-6">
-                  <Separator />
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="bg-background px-3 text-sm text-muted-foreground">
-                      or continue with email
-                    </span>
+                  <div className="space-y-2">
+                    <Label htmlFor="email" className="text-sm">Email</Label>
+                    <Input 
+                      id="email"
+                      type="email" 
+                      placeholder="your.email@example.com" 
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="h-10 text-sm"
+                    />
                   </div>
-                </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="password" className="text-sm">Password</Label>
+                    <Input 
+                      id="password"
+                      type="password" 
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      className="h-10 text-sm"
+                    />
+                  </div>
+                </CardContent>
+                <CardFooter className="pt-4 px-0">
+                  <Button 
+                    className="w-full h-10 text-sm font-medium" 
+                    onClick={handleSignIn}
+                    disabled={loading}
+                  >
+                    {loading ? "Signing in..." : "Sign In"}
+                  </Button>
+                </CardFooter>
+              </TabsContent>
+              
+              <TabsContent value="signup">
+                <CardContent className="space-y-4 p-0">
+                  {/* Google Sign In */}
+                  <GoogleAuthButton />
+                  
+                  <div className="relative my-4">
+                    <Separator />
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <span className="bg-background px-2 text-xs text-muted-foreground">
+                        or continue with email
+                      </span>
+                    </div>
+                  </div>
 
-                <div className="space-y-3">
-                  <Label htmlFor="signup-email" className="text-base">Email</Label>
-                  <Input 
-                    id="signup-email"
-                    type="email" 
-                    placeholder="your.email@example.com" 
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="h-12 text-base"
-                  />
-                </div>
-                <div className="space-y-3">
-                  <Label htmlFor="signup-password" className="text-base">Password</Label>
-                  <Input 
-                    id="signup-password"
-                    type="password" 
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="h-12 text-base"
-                  />
-                </div>
-              </CardContent>
-              <CardFooter className="pt-2">
-                <Button 
-                  className="w-full h-12 text-base font-medium" 
-                  onClick={handleSignUp}
-                  disabled={loading}
-                >
-                  {loading ? "Signing up..." : "Sign Up"}
-                </Button>
-              </CardFooter>
-            </TabsContent>
-          </Tabs>
+                  <div className="space-y-2">
+                    <Label htmlFor="signup-email" className="text-sm">Email</Label>
+                    <Input 
+                      id="signup-email"
+                      type="email" 
+                      placeholder="your.email@example.com" 
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="h-10 text-sm"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="signup-password" className="text-sm">Password</Label>
+                    <Input 
+                      id="signup-password"
+                      type="password" 
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      className="h-10 text-sm"
+                    />
+                  </div>
+                </CardContent>
+                <CardFooter className="pt-4 px-0">
+                  <Button 
+                    className="w-full h-10 text-sm font-medium" 
+                    onClick={handleSignUp}
+                    disabled={loading}
+                  >
+                    {loading ? "Signing up..." : "Sign Up"}
+                  </Button>
+                </CardFooter>
+              </TabsContent>
+            </Tabs>
+          </div>
         </Card>
       </div>
     </ThemeProvider>

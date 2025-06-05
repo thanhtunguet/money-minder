@@ -66,27 +66,23 @@ export default function Index() {
           <StatCard
             title="Total Balance"
             value={formatCurrency(balance)}
-            description="Current balance"
             icon={<DollarSign />}
           />
           <StatCard
             title="Total Income"
             value={formatCurrency(totalIncome)}
-            description="This period"
             icon={<TrendingUp />}
             className="text-green-600"
           />
           <StatCard
             title="Total Expenses"
             value={formatCurrency(totalExpenses)}
-            description="This period"
             icon={<TrendingDown />}
             className="text-red-600"
           />
           <StatCard
             title="Total Budget"
             value={formatCurrency(totalBudget)}
-            description="Allocated budget"
             icon={<Target />}
             className="text-blue-600"
           />
